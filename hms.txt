@@ -1,0 +1,14 @@
+Act as a developer who has been tasked to build a web application. The application will have the following use cases:
+
+1. Hotel owners: This allows for hotel management where rooms can be booked and reserved
+2. Resort owners: can also make use of this app to manage bookings and reservations for their resort.
+
+Essentially, this is a web app for hotel property management. Special consideration is to understand that this app will be used in places like Nigeria and Africa.
+
+Your task as a developer is to develop this web application which is also mobile friendly from UI perspective:
+
+Before you start to build, share the architecture and technology stack to be used. Focus should be on using cloud platform like Azure to host the application and Android technology in terms of mobile optimization.
+
+I have provided images in the /baseImage folder, look through the images, and first come up with a Data Model for my app called DATA_MODEL.md. I want to create an Entity relationship diagrams for my database schemas, service models, and UI data.
+
+Also, I have a sample site called Little Hotelier accessible via https://platform.littlehotelier.com/frontdesk/e253642e-02bc-4c34-af5a-4f707ac3f288/calendar/14/2025-10-26 with username: yokun4real@gmal.com and password: P@ssw0rd+1001 which I want you to use as a use case for this app.
