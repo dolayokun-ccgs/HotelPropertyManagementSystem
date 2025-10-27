@@ -16,6 +16,7 @@ public class HotelDbContext : DbContext
     public DbSet<Reservation> Reservations { get; set; }
     public DbSet<RatePlan> RatePlans { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<Promotion> Promotions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -112,6 +113,19 @@ public class HotelDbContext : DbContext
                   .WithMany()
                   .HasForeignKey(e => e.PropertyId)
                   .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        // Promotion configuration
+        modelBuilder.Entity<Promotion>(entity =>
+        {
+            entity.HasKey(e => e.PromotionId);
+            entity.Property(e => e.Code).IsRequired().HasMaxLength(200);
+            entity.Property(e => e.DefaultDiscount).HasPrecision(18, 2);
+            entity.Property(e => e.Currency).IsRequired().HasMaxLength(10);
+            entity.HasOne(e => e.Property)
+                  .WithMany()
+                  .HasForeignKey(e => e.PropertyId)
+                  .OnDelete(DeleteBehavior.Cascade);
         });
 
         // Seed initial data

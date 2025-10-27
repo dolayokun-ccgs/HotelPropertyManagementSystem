@@ -4,7 +4,9 @@
       "Bash(curl:*)",
       "Bash(dotnet add:*)",
       "Bash(dotnet run:*)",
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "Bash(dotnet ef migrations:*)",
+      "Bash(dotnet ef database:*)"
     ],
     "deny": [],
     "ask": []
