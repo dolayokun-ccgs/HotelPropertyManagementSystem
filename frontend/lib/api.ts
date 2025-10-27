@@ -2,9 +2,12 @@ import type {
   Reservation,
   Room,
   RoomType,
+  RatePlan,
   CreateReservationRequest,
   UpdateReservationRequest,
   ReservationFilters,
+  CreateRatePlanRequest,
+  UpdateRatePlanRequest,
 } from './types'
 
 const API_BASE_URL = 'http://localhost:5000/api'
@@ -93,5 +96,86 @@ export const roomsApi = {
   // Get available rooms for date range
   getAvailable: async (checkIn: string, checkOut: string): Promise<Room[]> => {
     return apiCall<Room[]>(`/rooms/available?checkIn=${checkIn}&checkOut=${checkOut}`)
+  },
+}
+
+// Room Types API
+export const roomTypesApi = {
+  // Get all room types
+  getAll: async (isActive?: boolean): Promise<RoomType[]> => {
+    const params = isActive !== undefined ? `?isActive=${isActive}` : ''
+    return apiCall<RoomType[]>(`/roomtypes${params}`)
+  },
+
+  // Get single room type by ID
+  getById: async (id: number): Promise<RoomType> => {
+    return apiCall<RoomType>(`/roomtypes/${id}`)
+  },
+
+  // Create room type
+  create: async (data: Partial<RoomType>): Promise<RoomType> => {
+    return apiCall<RoomType>('/roomtypes', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    })
+  },
+
+  // Update room type
+  update: async (id: number, data: Partial<RoomType>): Promise<void> => {
+    await apiCall<void>(`/roomtypes/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    })
+  },
+
+  // Delete room type
+  delete: async (id: number): Promise<void> => {
+    await apiCall<void>(`/roomtypes/${id}`, {
+      method: 'DELETE',
+    })
+  },
+}
+
+// Rate Plans API
+export const ratePlansApi = {
+  // Get all rate plans
+  getAll: async (isActive?: boolean): Promise<RatePlan[]> => {
+    const params = isActive !== undefined ? `?isActive=${isActive}` : ''
+    return apiCall<RatePlan[]>(`/rateplans${params}`)
+  },
+
+  // Get single rate plan by ID
+  getById: async (id: number): Promise<RatePlan> => {
+    return apiCall<RatePlan>(`/rateplans/${id}`)
+  },
+
+  // Create rate plan
+  create: async (data: CreateRatePlanRequest): Promise<RatePlan> => {
+    return apiCall<RatePlan>('/rateplans', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    })
+  },
+
+  // Update rate plan
+  update: async (id: number, data: UpdateRatePlanRequest): Promise<void> => {
+    await apiCall<void>(`/rateplans/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    })
+  },
+
+  // Delete rate plan
+  delete: async (id: number): Promise<void> => {
+    await apiCall<void>(`/rateplans/${id}`, {
+      method: 'DELETE',
+    })
+  },
+
+  // Set as default rate plan
+  setAsDefault: async (id: number): Promise<void> => {
+    await apiCall<void>(`/rateplans/${id}/set-default`, {
+      method: 'POST',
+    })
   },
 }

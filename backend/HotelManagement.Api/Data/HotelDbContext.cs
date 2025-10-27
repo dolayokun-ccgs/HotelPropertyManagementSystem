@@ -14,6 +14,8 @@ public class HotelDbContext : DbContext
     public DbSet<Room> Rooms { get; set; }
     public DbSet<Guest> Guests { get; set; }
     public DbSet<Reservation> Reservations { get; set; }
+    public DbSet<RatePlan> RatePlans { get; set; }
+    public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -73,16 +75,43 @@ public class HotelDbContext : DbContext
             entity.HasOne(e => e.Property)
                   .WithMany(p => p.Reservations)
                   .HasForeignKey(e => e.PropertyId)
-                  .OnDelete(DeleteBehavior.Cascade);
+                  .OnDelete(DeleteBehavior.Restrict);
             entity.HasOne(e => e.Room)
                   .WithMany(r => r.Reservations)
                   .HasForeignKey(e => e.RoomId)
-                  .OnDelete(DeleteBehavior.SetNull);
+                  .OnDelete(DeleteBehavior.Restrict);
             entity.HasOne(e => e.Guest)
                   .WithMany(g => g.Reservations)
                   .HasForeignKey(e => e.GuestId)
                   .OnDelete(DeleteBehavior.Restrict);
             entity.HasIndex(e => e.BookingReference).IsUnique();
+        });
+
+        // RatePlan configuration
+        modelBuilder.Entity<RatePlan>(entity =>
+        {
+            entity.HasKey(e => e.RatePlanId);
+            entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
+            entity.Property(e => e.MinimumRate).HasPrecision(18, 2);
+            entity.HasOne(e => e.Property)
+                  .WithMany()
+                  .HasForeignKey(e => e.PropertyId)
+                  .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // User configuration
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasKey(e => e.UserId);
+            entity.Property(e => e.Email).IsRequired().HasMaxLength(255);
+            entity.Property(e => e.FirstName).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.LastName).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.PasswordHash).IsRequired();
+            entity.HasIndex(e => e.Email).IsUnique();
+            entity.HasOne(e => e.Property)
+                  .WithMany()
+                  .HasForeignKey(e => e.PropertyId)
+                  .OnDelete(DeleteBehavior.SetNull);
         });
 
         // Seed initial data
