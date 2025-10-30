@@ -15,7 +15,7 @@ export function DirectBookingSidebar() {
   ]
 
   return (
-    <div className="w-48 bg-gray-50 border-r border-gray-200 py-4">
+    <div className="w-48 border-r border-gray-200 py-4" style={{ backgroundColor: 'var(--color-gray-light)' }}>
       {navItems.map((item) => {
         const isActive = pathname === item.href || pathname?.startsWith(item.href + '/')
         return (
@@ -24,9 +24,16 @@ export function DirectBookingSidebar() {
             href={item.href}
             className={`block px-6 py-3 text-sm font-medium transition-colors ${
               isActive
-                ? 'bg-white text-gray-900 border-l-4 border-primary'
-                : 'text-gray-600 hover:bg-gray-100 border-l-4 border-transparent'
+                ? 'text-gray-900 border-l-4 border-primary'
+                : 'text-gray-600 border-l-4 border-transparent'
             }`}
+            style={isActive ? { backgroundColor: 'var(--color-white)' } : undefined}
+            onMouseEnter={(e) => {
+              if (!isActive) e.currentTarget.style.backgroundColor = 'var(--color-peach-light)'
+            }}
+            onMouseLeave={(e) => {
+              if (!isActive) e.currentTarget.style.backgroundColor = ''
+            }}
           >
             {item.label}
           </Link>

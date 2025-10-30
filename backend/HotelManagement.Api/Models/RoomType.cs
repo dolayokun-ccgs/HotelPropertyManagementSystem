@@ -18,4 +18,5 @@ public class RoomType
     // Navigation properties
     public Property? Property { get; set; }
     public ICollection<Room> Rooms { get; set; } = new List<Room>();
+    public ICollection<RoomTypeMedia> RoomTypeMedia { get; set; } = new List<RoomTypeMedia>();
 }

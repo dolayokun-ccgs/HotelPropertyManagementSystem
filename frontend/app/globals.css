@@ -4,6 +4,14 @@
 
 @layer base {
   :root {
+    /* Official Color Palette */
+    --color-black: #000000;
+    --color-peach-light: #fef8f3;
+    --color-gray-light: #f6f6f6;
+    --color-blue-gray: #e6ebf2;
+    --color-white: #ffffff;
+    --color-blue-light: #f5f9ff;
+
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
@@ -71,6 +79,11 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    background-image: url('/FMS_Background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
   }
 }

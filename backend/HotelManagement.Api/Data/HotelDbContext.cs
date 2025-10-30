@@ -17,6 +17,8 @@ public class HotelDbContext : DbContext
     public DbSet<RatePlan> RatePlans { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Promotion> Promotions { get; set; }
+    public DbSet<Media> Media { get; set; }
+    public DbSet<RoomTypeMedia> RoomTypeMedia { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -126,6 +128,43 @@ public class HotelDbContext : DbContext
                   .WithMany()
                   .HasForeignKey(e => e.PropertyId)
                   .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // Media configuration
+        modelBuilder.Entity<Media>(entity =>
+        {
+            entity.HasKey(e => e.MediaId);
+            entity.Property(e => e.FileName).IsRequired().HasMaxLength(255);
+            entity.Property(e => e.StoredFileName).IsRequired().HasMaxLength(255);
+            entity.Property(e => e.FilePath).IsRequired().HasMaxLength(500);
+            entity.Property(e => e.MimeType).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.Category).IsRequired().HasMaxLength(50);
+            entity.Property(e => e.Caption).HasMaxLength(500);
+            entity.HasOne(e => e.Property)
+                  .WithMany()
+                  .HasForeignKey(e => e.PropertyId)
+                  .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(e => e.UploadedByUser)
+                  .WithMany()
+                  .HasForeignKey(e => e.UploadedBy)
+                  .OnDelete(DeleteBehavior.Restrict);
+            entity.HasIndex(e => e.Category);
+            entity.HasIndex(e => e.StoredFileName).IsUnique();
+        });
+
+        // RoomTypeMedia configuration
+        modelBuilder.Entity<RoomTypeMedia>(entity =>
+        {
+            entity.HasKey(e => e.RoomTypeMediaId);
+            entity.HasOne(e => e.RoomType)
+                  .WithMany(rt => rt.RoomTypeMedia)
+                  .HasForeignKey(e => e.RoomTypeId)
+                  .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(e => e.Media)
+                  .WithMany(m => m.RoomTypeMedia)
+                  .HasForeignKey(e => e.MediaId)
+                  .OnDelete(DeleteBehavior.Restrict);
+            entity.HasIndex(e => new { e.RoomTypeId, e.MediaId }).IsUnique();
         });
 
         // Seed initial data

@@ -7,11 +7,11 @@ const setupSections = [
     title: "Property settings",
     icon: "🏨",
     links: [
-      "General information",
-      "Property details",
-      "Services",
-      "Policies",
-      "Media library"
+      { label: "General information", href: "/setup/general-information" },
+      { label: "Property details", href: "/setup/property-details" },
+      { label: "Services", href: "/setup/services" },
+      { label: "Policies", href: "/setup/policies" },
+      { label: "Media library", href: "/setup/media-library" }
     ]
   },
   {

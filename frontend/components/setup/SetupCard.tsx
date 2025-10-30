@@ -4,10 +4,15 @@ import React from 'react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 
+interface SetupLink {
+  label: string
+  href: string
+}
+
 interface SetupCardProps {
   title: string
   icon: string
-  links: string[]
+  links: (string | SetupLink)[]
 }
 
 export function SetupCard({ title, icon, links }: SetupCardProps) {
@@ -21,18 +26,23 @@ export function SetupCard({ title, icon, links }: SetupCardProps) {
 
       {/* Card Links */}
       <div className="space-y-1">
-        {links.map((link, index) => (
-          <Link
-            key={index}
-            href="#"
-            className={cn(
-              "block px-3 py-2 text-sm rounded-md transition-colors",
-              "text-[#0066cc] hover:bg-[#f0f7ff]"
-            )}
-          >
-            {link}
-          </Link>
-        ))}
+        {links.map((link, index) => {
+          const label = typeof link === 'string' ? link : link.label
+          const href = typeof link === 'string' ? '#' : link.href
+
+          return (
+            <Link
+              key={index}
+              href={href}
+              className={cn(
+                "block px-3 py-2 text-sm rounded-md transition-colors",
+                "text-[#0066cc] hover:bg-[#f0f7ff]"
+              )}
+            >
+              {label}
+            </Link>
+          )
+        })}
       </div>
     </div>
   )

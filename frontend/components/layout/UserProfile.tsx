@@ -47,7 +47,7 @@ export function UserProfile() {
       {/* Property/Hotel Dropdown */}
       <DropdownMenu.Root>
         <DropdownMenu.Trigger asChild>
-          <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-md transition-colors">
+          <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md transition-colors" style={{ color: 'var(--color-white)' }}>
             <span>Luwa Resort</span>
             <ChevronDown className="w-4 h-4" />
           </button>
@@ -77,7 +77,7 @@ export function UserProfile() {
       {/* User Dropdown */}
       <DropdownMenu.Root>
         <DropdownMenu.Trigger asChild>
-          <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-md transition-colors">
+          <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md transition-colors" style={{ color: 'var(--color-white)' }}>
             <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-semibold">
               {user ? `${user.firstName[0]}${user.lastName[0]}` : 'LH'}
             </div>

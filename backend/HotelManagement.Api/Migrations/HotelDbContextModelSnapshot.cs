@@ -82,6 +82,78 @@ namespace HotelManagement.Api.Migrations
                     b.ToTable("Guests");
                 });
 
+            modelBuilder.Entity("HotelManagement.Api.Models.Media", b =>
+                {
+                    b.Property<int>("MediaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MediaId"));
+
+                    b.Property<string>("Caption")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<long>("FileSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<int?>("Height")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MimeType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("PropertyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StoredFileName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<int>("UploadedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UploadedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Width")
+                        .HasColumnType("int");
+
+                    b.HasKey("MediaId");
+
+                    b.HasIndex("Category");
+
+                    b.HasIndex("PropertyId");
+
+                    b.HasIndex("StoredFileName")
+                        .IsUnique();
+
+                    b.HasIndex("UploadedBy");
+
+                    b.ToTable("Media");
+                });
+
             modelBuilder.Entity("HotelManagement.Api.Models.Promotion", b =>
                 {
                     b.Property<int>("PromotionId")
@@ -203,7 +275,7 @@ namespace HotelManagement.Api.Migrations
                         {
                             PropertyId = 1,
                             Address = "123 Beach Road, Lagos",
-                            CreatedDate = new DateTime(2025, 10, 27, 6, 12, 49, 204, DateTimeKind.Utc).AddTicks(1076),
+                            CreatedDate = new DateTime(2025, 10, 30, 10, 34, 21, 806, DateTimeKind.Utc).AddTicks(7657),
                             Currency = "NGN",
                             Email = "info@luwaresort.com",
                             Name = "Luwa Resort",
@@ -534,6 +606,39 @@ namespace HotelManagement.Api.Migrations
                         });
                 });
 
+            modelBuilder.Entity("HotelManagement.Api.Models.RoomTypeMedia", b =>
+                {
+                    b.Property<int>("RoomTypeMediaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoomTypeMediaId"));
+
+                    b.Property<DateTime>("AssignedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsPrimary")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MediaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoomTypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("RoomTypeMediaId");
+
+                    b.HasIndex("MediaId");
+
+                    b.HasIndex("RoomTypeId", "MediaId")
+                        .IsUnique();
+
+                    b.ToTable("RoomTypeMedia");
+                });
+
             modelBuilder.Entity("HotelManagement.Api.Models.User", b =>
                 {
                     b.Property<int>("UserId")
@@ -591,6 +696,25 @@ namespace HotelManagement.Api.Migrations
                     b.HasIndex("PropertyId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("HotelManagement.Api.Models.Media", b =>
+                {
+                    b.HasOne("HotelManagement.Api.Models.Property", "Property")
+                        .WithMany()
+                        .HasForeignKey("PropertyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HotelManagement.Api.Models.User", "UploadedByUser")
+                        .WithMany()
+                        .HasForeignKey("UploadedBy")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Property");
+
+                    b.Navigation("UploadedByUser");
                 });
 
             modelBuilder.Entity("HotelManagement.Api.Models.Promotion", b =>
@@ -671,6 +795,25 @@ namespace HotelManagement.Api.Migrations
                     b.Navigation("Property");
                 });
 
+            modelBuilder.Entity("HotelManagement.Api.Models.RoomTypeMedia", b =>
+                {
+                    b.HasOne("HotelManagement.Api.Models.Media", "Media")
+                        .WithMany("RoomTypeMedia")
+                        .HasForeignKey("MediaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HotelManagement.Api.Models.RoomType", "RoomType")
+                        .WithMany("RoomTypeMedia")
+                        .HasForeignKey("RoomTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Media");
+
+                    b.Navigation("RoomType");
+                });
+
             modelBuilder.Entity("HotelManagement.Api.Models.User", b =>
                 {
                     b.HasOne("HotelManagement.Api.Models.Property", "Property")
@@ -684,6 +827,11 @@ namespace HotelManagement.Api.Migrations
             modelBuilder.Entity("HotelManagement.Api.Models.Guest", b =>
                 {
                     b.Navigation("Reservations");
+                });
+
+            modelBuilder.Entity("HotelManagement.Api.Models.Media", b =>
+                {
+                    b.Navigation("RoomTypeMedia");
                 });
 
             modelBuilder.Entity("HotelManagement.Api.Models.Property", b =>
@@ -702,6 +850,8 @@ namespace HotelManagement.Api.Migrations
 
             modelBuilder.Entity("HotelManagement.Api.Models.RoomType", b =>
                 {
+                    b.Navigation("RoomTypeMedia");
+
                     b.Navigation("Rooms");
                 });
 #pragma warning restore 612, 618

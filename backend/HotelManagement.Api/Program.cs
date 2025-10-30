@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using HotelManagement.Api.Data;
+using HotelManagement.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Register services
+builder.Services.AddScoped<IFileUploadService, FileUploadService>();
 
 // Configure Database
 builder.Services.AddDbContext<HotelDbContext>(options =>
@@ -60,6 +64,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowFrontend");
+
+// Serve static files (uploaded images)
+app.UseStaticFiles();
 
 app.UseAuthentication();
 app.UseAuthorization();

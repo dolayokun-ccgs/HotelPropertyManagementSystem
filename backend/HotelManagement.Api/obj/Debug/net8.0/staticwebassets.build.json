@@ -1,11 +1,19 @@
 {
   "Version": 1,
-  "Hash": "I+Swd43c2JnjcZSeT9uF7ng830n7QfDbPP+B70mBAoU=",
+  "Hash": "Pb77fCmnDc1inMJ8oCsRLxR/7MaqzlhEiipG+fiFBqU=",
   "Source": "HotelManagement.Api",
   "BasePath": "_content/HotelManagement.Api",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "HotelManagement.Api\\wwwroot",
+      "Source": "HotelManagement.Api",
+      "ContentRoot": "C:\\Users\\Damola Olayokun\\Documents\\Claude\\hms\\backend\\HotelManagement.Api\\wwwroot\\",
+      "BasePath": "_content/HotelManagement.Api",
+      "Pattern": "**"
+    }
+  ],
   "Assets": []
 }

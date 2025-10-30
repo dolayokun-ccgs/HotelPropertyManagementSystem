@@ -24,11 +24,11 @@ export function ReservationsFilter({ filters, onFiltersChange, onSearch }: Reser
   }
 
   return (
-    <div className="bg-gray-700 rounded-lg p-6">
+    <div className="rounded-lg p-6" style={{ backgroundColor: 'var(--color-blue-gray)' }}>
       <div className="grid grid-cols-4 gap-4">
         {/* Row 1 */}
         <div>
-          <label className="block text-sm text-white mb-2">Guest last name</label>
+          <label className="block text-sm text-gray-700 mb-2 font-medium">Guest last name</label>
           <input
             type="text"
             value={filters.guestLastName}
@@ -38,7 +38,7 @@ export function ReservationsFilter({ filters, onFiltersChange, onSearch }: Reser
         </div>
 
         <div>
-          <label className="block text-sm text-white mb-2">Booking reference</label>
+          <label className="block text-sm text-gray-700 mb-2 font-medium">Booking reference</label>
           <input
             type="text"
             value={filters.bookingReference}
@@ -48,7 +48,7 @@ export function ReservationsFilter({ filters, onFiltersChange, onSearch }: Reser
         </div>
 
         <div>
-          <label className="block text-sm text-white mb-2">Invoice Number</label>
+          <label className="block text-sm text-gray-700 mb-2 font-medium">Invoice Number</label>
           <input
             type="text"
             value={filters.invoiceNumber}
@@ -58,7 +58,7 @@ export function ReservationsFilter({ filters, onFiltersChange, onSearch }: Reser
         </div>
 
         <div>
-          <label className="block text-sm text-white mb-2">Date type</label>
+          <label className="block text-sm text-gray-700 mb-2 font-medium">Date type</label>
           <select
             value={filters.dateType}
             onChange={(e) => handleChange('dateType', e.target.value)}
@@ -72,7 +72,7 @@ export function ReservationsFilter({ filters, onFiltersChange, onSearch }: Reser
 
         {/* Row 2 */}
         <div>
-          <label className="block text-sm text-white mb-2">Status</label>
+          <label className="block text-sm text-gray-700 mb-2 font-medium">Status</label>
           <select
             value={filters.status}
             onChange={(e) => handleChange('status', e.target.value)}
@@ -87,7 +87,7 @@ export function ReservationsFilter({ filters, onFiltersChange, onSearch }: Reser
         </div>
 
         <div>
-          <label className="block text-sm text-white mb-2">Date from</label>
+          <label className="block text-sm text-gray-700 mb-2 font-medium">Date from</label>
           <div className="relative">
             <input
               type="date"
@@ -99,7 +99,7 @@ export function ReservationsFilter({ filters, onFiltersChange, onSearch }: Reser
         </div>
 
         <div>
-          <label className="block text-sm text-white mb-2">Date to</label>
+          <label className="block text-sm text-gray-700 mb-2 font-medium">Date to</label>
           <div className="relative">
             <input
               type="date"
@@ -111,7 +111,7 @@ export function ReservationsFilter({ filters, onFiltersChange, onSearch }: Reser
         </div>
 
         <div>
-          <label className="block text-sm text-white mb-2">Source</label>
+          <label className="block text-sm text-gray-700 mb-2 font-medium">Source</label>
           <select
             value={filters.source}
             onChange={(e) => handleChange('source', e.target.value)}

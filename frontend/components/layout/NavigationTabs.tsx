@@ -21,7 +21,7 @@ export function NavigationTabs() {
   const pathname = usePathname()
 
   return (
-    <nav className="border-t border-gray-200">
+    <nav className="border-t border-gray-200" style={{ backgroundColor: 'var(--color-white)' }}>
       <div className="flex overflow-x-auto">
         {tabs.map((tab) => {
           const isActive = pathname?.startsWith(tab.href)
