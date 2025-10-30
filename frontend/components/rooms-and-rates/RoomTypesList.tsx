@@ -3,9 +3,18 @@
 import React, { useState, useEffect } from 'react'
 import { roomTypesApi } from '@/lib/api'
 import type { RoomType } from '@/lib/types'
+import { MediaSelectionModal } from '@/components/media/MediaSelectionModal'
+import { Image as ImageIcon, MoreVertical } from 'lucide-react'
 
 interface RoomTypesListProps {
   onAddRoomType: () => void
+}
+
+interface RoomTypeMedia {
+  mediaId: number
+  url: string
+  caption?: string
+  isPrimary: boolean
 }
 
 export function RoomTypesList({ onAddRoomType }: RoomTypesListProps) {
@@ -13,6 +22,9 @@ export function RoomTypesList({ onAddRoomType }: RoomTypesListProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [expandedTypes, setExpandedTypes] = useState<Set<number>>(new Set())
   const [filterCategory, setFilterCategory] = useState<string>('')
+  const [mediaSelectionOpen, setMediaSelectionOpen] = useState(false)
+  const [selectedRoomTypeId, setSelectedRoomTypeId] = useState<number | null>(null)
+  const [roomTypeMedia, setRoomTypeMedia] = useState<Record<number, RoomTypeMedia[]>>({})
 
   useEffect(() => {
     fetchRoomTypes()
@@ -23,10 +35,44 @@ export function RoomTypesList({ onAddRoomType }: RoomTypesListProps) {
     try {
       const data = await roomTypesApi.getAll(true) // only active
       setRoomTypes(data)
+
+      // Fetch media for each room type
+      for (const roomType of data) {
+        fetchRoomTypeMedia(roomType.roomTypeId)
+      }
     } catch (error) {
       console.error('Failed to fetch room types:', error)
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const fetchRoomTypeMedia = async (roomTypeId: number) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/media/roomtypes/${roomTypeId}`)
+      if (response.ok) {
+        const data = await response.json()
+        const mediaItems = data.map((item: any) => ({
+          mediaId: item.mediaId,
+          url: `http://localhost:5000${item.media.url}`,
+          caption: item.media.caption,
+          isPrimary: item.isPrimary
+        }))
+        setRoomTypeMedia(prev => ({ ...prev, [roomTypeId]: mediaItems }))
+      }
+    } catch (error) {
+      console.error(`Failed to fetch media for room type ${roomTypeId}:`, error)
+    }
+  }
+
+  const handleAssignMedia = (roomTypeId: number) => {
+    setSelectedRoomTypeId(roomTypeId)
+    setMediaSelectionOpen(true)
+  }
+
+  const handleMediaAssigned = () => {
+    if (selectedRoomTypeId) {
+      fetchRoomTypeMedia(selectedRoomTypeId)
     }
   }
 
@@ -169,6 +215,7 @@ export function RoomTypesList({ onAddRoomType }: RoomTypesListProps) {
                         {roomType.category}
                       </span>
                     )}
+                    <span className="text-sm text-gray-600">#{roomType.roomTypeId}</span>
                   </div>
 
                   {roomType.description && (
@@ -205,14 +252,40 @@ export function RoomTypesList({ onAddRoomType }: RoomTypesListProps) {
                 </div>
               </div>
 
+              {/* Image Section */}
+              <div className="flex items-center gap-3 ml-4">
+                {roomTypeMedia[roomType.roomTypeId]?.length > 0 ? (
+                  <div className="w-20 h-20 bg-gray-100 rounded overflow-hidden">
+                    <img
+                      src={roomTypeMedia[roomType.roomTypeId][0].url}
+                      alt="Room"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ) : (
+                  <div className="w-20 h-20 bg-gray-100 rounded flex items-center justify-center">
+                    <ImageIcon className="w-8 h-8 text-gray-400" />
+                  </div>
+                )}
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleAssignMedia(roomType.roomTypeId)
+                  }}
+                  className="text-sm text-primary hover:text-blue-700 font-medium flex items-center gap-1"
+                >
+                  + Assign from Media Library
+                </button>
+              </div>
+
               <button
                 onClick={(e) => {
                   e.stopPropagation()
-                  handleDelete(roomType.roomTypeId)
                 }}
-                className="px-3 py-1 text-sm text-red-600 hover:text-red-700 font-medium ml-4"
+                className="p-2 hover:bg-gray-100 rounded ml-4"
               >
-                Delete
+                <MoreVertical className="w-5 h-5 text-gray-400" />
               </button>
             </div>
 
@@ -247,6 +320,16 @@ export function RoomTypesList({ onAddRoomType }: RoomTypesListProps) {
           </button>
           .
         </div>
+      )}
+
+      {/* Media Selection Modal */}
+      {selectedRoomTypeId && (
+        <MediaSelectionModal
+          isOpen={mediaSelectionOpen}
+          onClose={() => setMediaSelectionOpen(false)}
+          onSelect={handleMediaAssigned}
+          roomTypeId={selectedRoomTypeId}
+        />
       )}
     </div>
   )

@@ -10,7 +10,9 @@
       "Bash(git checkout:*)",
       "Bash(dotnet ef dbcontext:*)",
       "Bash(dotnet build:*)",
-      "Bash(timeout /t 2)"
+      "Bash(timeout /t 2)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)"
     ],
     "deny": [],
     "ask": []
