@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { MainLayout } from '@/components/layout/MainLayout'
 import { DistributionSidebar } from '@/components/distribution/DistributionSidebar'
 import { ChevronRight, Search, SlidersHorizontal } from 'lucide-react'
@@ -43,6 +44,7 @@ const ALL_CHANNELS: Channel[] = [
 ]
 
 export default function ChannelsPage() {
+  const router = useRouter()
   const [activeTab, setActiveTab] = useState<'my' | 'all'>('my')
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedChannel, setSelectedChannel] = useState<Channel | null>(null)
@@ -56,7 +58,12 @@ export default function ChannelsPage() {
   )
 
   const handleChannelClick = (channel: Channel) => {
-    if (!channel.isConnected) {
+    if (channel.isConnected) {
+      // Navigate to the channel's page
+      if (channel.id === 'direct-booking') {
+        router.push('/direct-booking')
+      }
+    } else {
       setSelectedChannel(channel)
       setShowConnectionModal(true)
     }
@@ -133,9 +140,7 @@ export default function ChannelsPage() {
                   <div
                     key={channel.id}
                     onClick={() => handleChannelClick(channel)}
-                    className={`flex items-center justify-between p-4 border border-gray-300 rounded-lg hover:shadow-sm transition-shadow ${
-                      !channel.isConnected ? 'cursor-pointer' : ''
-                    }`}
+                    className="flex items-center justify-between p-4 border border-gray-300 rounded-lg hover:shadow-sm transition-shadow cursor-pointer"
                   >
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">

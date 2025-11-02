@@ -241,10 +241,6 @@ namespace HotelManagement.Api.Migrations
                     b.Property<bool>("AutoReplenishment")
                         .HasColumnType("bit");
 
-                    b.Property<string>("BaseCurrency")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("BaseLanguage")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -332,10 +328,6 @@ namespace HotelManagement.Api.Migrations
                     b.Property<string>("TermsAndConditionsEnglish")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TimeZone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Timezone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -377,16 +369,14 @@ namespace HotelManagement.Api.Migrations
                             PropertyId = 1,
                             Address = "123 Beach Road, Lagos",
                             AutoReplenishment = false,
-                            BaseCurrency = "USD",
                             BaseLanguage = "English",
-                            CreatedDate = new DateTime(2025, 10, 30, 14, 48, 37, 22, DateTimeKind.Utc).AddTicks(6713),
+                            CreatedDate = new DateTime(2025, 11, 2, 20, 30, 30, 42, DateTimeKind.Utc).AddTicks(1843),
                             Currency = "NGN",
                             CurrencyConversion = false,
                             Email = "info@luwaresort.com",
                             Name = "Luwa Resort",
                             Phone = "+234-xxx-xxxx",
                             Status = "Active",
-                            TimeZone = "UTC",
                             Timezone = "Africa/Lagos",
                             Type = "Resort",
                             UnitsOfMeasurement = "Metric",

@@ -8,11 +8,12 @@ public class Property
     public required string Address { get; set; }
     public string? Phone { get; set; }
     public string? Email { get; set; }
+    public string Currency { get; set; } = "USD";  // Base currency (existing column)
+    public string Timezone { get; set; } = "UTC";  // Time zone (existing column)
     public string Status { get; set; } = "Active";
     public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
     // General Information
-    public string BaseCurrency { get; set; } = "USD";
     public bool CurrencyConversion { get; set; } = false;
     public decimal? MinimumRate { get; set; }
     public int UpdatePeriod { get; set; } = 400;
@@ -21,7 +22,6 @@ public class Property
     public string? ReservationDeliveryFailureEmail { get; set; }
     public string BaseLanguage { get; set; } = "English";
     public string UnitsOfMeasurement { get; set; } = "Metric";
-    public string TimeZone { get; set; } = "UTC";
 
     // Property Details
     public decimal? Latitude { get; set; }

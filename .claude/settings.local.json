@@ -12,7 +12,11 @@
       "Bash(dotnet build:*)",
       "Bash(timeout /t 2)",
       "Bash(netstat:*)",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(del:*)",
+      "Bash(taskkill /F /PID 7460)",
+      "Bash(taskkill:*)",
+      "Bash(kill:*)"
     ],
     "deny": [],
     "ask": []

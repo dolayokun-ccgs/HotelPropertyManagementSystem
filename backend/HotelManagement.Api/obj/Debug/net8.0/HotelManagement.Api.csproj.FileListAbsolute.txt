@@ -140,3 +140,4 @@ C:\Users\Damola Olayokun\Documents\Claude\hms\backend\HotelManagement.Api\bin\De
 C:\Users\Damola Olayokun\Documents\Claude\hms\backend\HotelManagement.Api\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\Damola Olayokun\Documents\Claude\hms\backend\HotelManagement.Api\bin\Debug\net8.0\HotelManagement.Api.staticwebassets.runtime.json
 C:\Users\Damola Olayokun\Documents\Claude\hms\backend\HotelManagement.Api\bin\Debug\net8.0\SixLabors.ImageSharp.dll
+C:\Users\Damola Olayokun\Documents\Claude\hms\backend\HotelManagement.Api\bin\Debug\net8.0\BCrypt.Net-Next.dll

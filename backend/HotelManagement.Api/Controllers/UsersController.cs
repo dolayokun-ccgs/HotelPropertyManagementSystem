@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 
 namespace HotelManagement.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class UsersController : ControllerBase

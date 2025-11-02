@@ -14,6 +14,7 @@ builder.Services.AddSwaggerGen();
 
 // Register services
 builder.Services.AddScoped<IFileUploadService, FileUploadService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 // Configure Database
 builder.Services.AddDbContext<HotelDbContext>(options =>

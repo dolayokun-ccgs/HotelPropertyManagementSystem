@@ -25,13 +25,6 @@ namespace HotelManagement.Api.Migrations
                 defaultValue: false);
 
             migrationBuilder.AddColumn<string>(
-                name: "BaseCurrency",
-                table: "Properties",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
-
-            migrationBuilder.AddColumn<string>(
                 name: "BaseLanguage",
                 table: "Properties",
                 type: "nvarchar(max)",
@@ -160,13 +153,6 @@ namespace HotelManagement.Api.Migrations
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
-                name: "TimeZone",
-                table: "Properties",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
-
-            migrationBuilder.AddColumn<string>(
                 name: "Transport",
                 table: "Properties",
                 type: "nvarchar(max)",
@@ -215,8 +201,8 @@ namespace HotelManagement.Api.Migrations
                 table: "Properties",
                 keyColumn: "PropertyId",
                 keyValue: 1,
-                columns: new[] { "AlternativePhone", "AutoReplenishment", "BaseCurrency", "BaseLanguage", "CheckInTime", "CheckOutTime", "CreatedDate", "CurrencyConversion", "Facebook", "Instagram", "InstructionsToLocationEnglish", "Latitude", "Longitude", "MinimumRate", "Parking", "PaymentPolicyEnglish", "PropertyDescriptionEnglish", "PropertyFacilities", "PropertyRating", "PublicEmail", "PublicPhone", "ReservationDeliveryFailureEmail", "SmokingPolicy", "TaxId", "TermsAndConditionsEnglish", "TimeZone", "Transport", "Twitter", "UnitsOfMeasurement", "UpdatePeriod", "Website", "WeekendStartsOn", "YouTube" },
-                values: new object[] { null, false, "USD", "English", null, null, new DateTime(2025, 10, 30, 14, 48, 37, 22, DateTimeKind.Utc).AddTicks(6713), false, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, "UTC", null, null, "Metric", 400, null, "Saturday", null });
+                columns: new[] { "AlternativePhone", "AutoReplenishment", "BaseLanguage", "CheckInTime", "CheckOutTime", "CreatedDate", "CurrencyConversion", "Facebook", "Instagram", "InstructionsToLocationEnglish", "Latitude", "Longitude", "MinimumRate", "Parking", "PaymentPolicyEnglish", "PropertyDescriptionEnglish", "PropertyFacilities", "PropertyRating", "PublicEmail", "PublicPhone", "ReservationDeliveryFailureEmail", "SmokingPolicy", "TaxId", "TermsAndConditionsEnglish", "Transport", "Twitter", "UnitsOfMeasurement", "UpdatePeriod", "Website", "WeekendStartsOn", "YouTube" },
+                values: new object[] { null, false, "English", null, null, new DateTime(2025, 11, 2, 20, 30, 30, 42, DateTimeKind.Utc).AddTicks(1843), false, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, "Metric", 400, null, "Saturday", null });
         }
 
         /// <inheritdoc />
@@ -228,10 +214,6 @@ namespace HotelManagement.Api.Migrations
 
             migrationBuilder.DropColumn(
                 name: "AutoReplenishment",
-                table: "Properties");
-
-            migrationBuilder.DropColumn(
-                name: "BaseCurrency",
                 table: "Properties");
 
             migrationBuilder.DropColumn(
@@ -316,10 +298,6 @@ namespace HotelManagement.Api.Migrations
 
             migrationBuilder.DropColumn(
                 name: "TermsAndConditionsEnglish",
-                table: "Properties");
-
-            migrationBuilder.DropColumn(
-                name: "TimeZone",
                 table: "Properties");
 
             migrationBuilder.DropColumn(
