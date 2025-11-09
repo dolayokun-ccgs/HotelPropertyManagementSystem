@@ -9,23 +9,47 @@ import type {
   CreateRatePlanRequest,
   UpdateRatePlanRequest,
 } from './types'
+import type { LoginRequest, RegisterRequest, LoginResponse, User } from './auth-types'
+import type { Guest, CreateGuestRequest, UpdateGuestRequest } from './guest-types'
 
 const API_BASE_URL = 'http://localhost:5000/api'
+
+// Get auth token from localStorage
+function getAuthToken(): string | null {
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem('authToken')
+  }
+  return null
+}
 
 // Helper function for API calls
 async function apiCall<T>(
   endpoint: string,
   options?: RequestInit
 ): Promise<T> {
+  const token = getAuthToken()
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+    ...options?.headers,
+  }
+
+  // Add Authorization header if token exists
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`
+  }
+
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
+    headers,
     ...options,
   })
 
   if (!response.ok) {
+    // Handle 401 Unauthorized by clearing token
+    if (response.status === 401 && typeof window !== 'undefined') {
+      localStorage.removeItem('authToken')
+      localStorage.removeItem('authUser')
+      window.location.href = '/login'
+    }
     throw new Error(`API Error: ${response.statusText}`)
   }
 
@@ -177,5 +201,89 @@ export const ratePlansApi = {
     await apiCall<void>(`/rateplans/${id}/set-default`, {
       method: 'POST',
     })
+  },
+}
+
+// Authentication API
+export const authApi = {
+  // Login
+  login: async (data: LoginRequest): Promise<LoginResponse> => {
+    return apiCall<LoginResponse>('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    })
+  },
+
+  // Register
+  register: async (data: RegisterRequest): Promise<LoginResponse> => {
+    return apiCall<LoginResponse>('/auth/register', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    })
+  },
+
+  // Get current user
+  me: async (): Promise<User> => {
+    return apiCall<User>('/auth/me')
+  },
+
+  // Logout
+  logout: async (): Promise<void> => {
+    await apiCall<void>('/auth/logout', {
+      method: 'POST',
+    })
+  },
+
+  // Refresh token
+  refresh: async (): Promise<LoginResponse> => {
+    return apiCall<LoginResponse>('/auth/refresh', {
+      method: 'POST',
+    })
+  },
+}
+
+// Guests API
+export const guestsApi = {
+  // Get all guests
+  getAll: async (params?: { search?: string; isActive?: boolean }): Promise<Guest[]> => {
+    const queryParams = new URLSearchParams()
+    if (params?.search) queryParams.append('search', params.search)
+    if (params?.isActive !== undefined) queryParams.append('isActive', params.isActive.toString())
+
+    const url = `/guests${queryParams.toString() ? `?${queryParams.toString()}` : ''}`
+    return apiCall<Guest[]>(url)
+  },
+
+  // Get guest by ID
+  getById: async (id: number): Promise<Guest> => {
+    return apiCall<Guest>(`/guests/${id}`)
+  },
+
+  // Create guest
+  create: async (data: CreateGuestRequest): Promise<Guest> => {
+    return apiCall<Guest>('/guests', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    })
+  },
+
+  // Update guest
+  update: async (id: number, data: UpdateGuestRequest): Promise<void> => {
+    await apiCall<void>(`/guests/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    })
+  },
+
+  // Delete guest (soft delete)
+  delete: async (id: number): Promise<void> => {
+    await apiCall<void>(`/guests/${id}`, {
+      method: 'DELETE',
+    })
+  },
+
+  // Get guest reservations
+  getReservations: async (id: number): Promise<Reservation[]> => {
+    return apiCall<Reservation[]>(`/guests/${id}/reservations`)
   },
 }

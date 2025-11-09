@@ -1,10 +1,12 @@
 "use client"
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { roomTypesApi } from '@/lib/api'
 import type { RoomType } from '@/lib/types'
 import { MediaSelectionModal } from '@/components/media/MediaSelectionModal'
-import { Image as ImageIcon, MoreVertical } from 'lucide-react'
+import { EditRoomsModal } from './EditRoomsModal'
+import { EditRoomTypeModal } from './EditRoomTypeModal'
+import { Image as ImageIcon, MoreVertical, Edit, Trash2, Home } from 'lucide-react'
 
 interface RoomTypesListProps {
   onAddRoomType: () => void
@@ -25,9 +27,28 @@ export function RoomTypesList({ onAddRoomType }: RoomTypesListProps) {
   const [mediaSelectionOpen, setMediaSelectionOpen] = useState(false)
   const [selectedRoomTypeId, setSelectedRoomTypeId] = useState<number | null>(null)
   const [roomTypeMedia, setRoomTypeMedia] = useState<Record<number, RoomTypeMedia[]>>({})
+  const [editRoomsModalOpen, setEditRoomsModalOpen] = useState(false)
+  const [editRoomTypeModalOpen, setEditRoomTypeModalOpen] = useState(false)
+  const [selectedRoomTypeForEdit, setSelectedRoomTypeForEdit] = useState<RoomType | null>(null)
+  const [openDropdownId, setOpenDropdownId] = useState<number | null>(null)
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     fetchRoomTypes()
+  }, [])
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setOpenDropdownId(null)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
   }, [])
 
   const fetchRoomTypes = async () => {
@@ -104,6 +125,23 @@ export function RoomTypesList({ onAddRoomType }: RoomTypesListProps) {
       console.error('Failed to delete room type:', error)
       alert('Failed to delete room type')
     }
+  }
+
+  const handleEditRooms = (roomType: RoomType) => {
+    setSelectedRoomTypeForEdit(roomType)
+    setEditRoomsModalOpen(true)
+    setOpenDropdownId(null)
+  }
+
+  const handleEditRoomType = (roomType: RoomType) => {
+    setSelectedRoomTypeForEdit(roomType)
+    setEditRoomTypeModalOpen(true)
+    setOpenDropdownId(null)
+  }
+
+  const toggleDropdown = (roomTypeId: number, e: React.MouseEvent) => {
+    e.stopPropagation()
+    setOpenDropdownId(openDropdownId === roomTypeId ? null : roomTypeId)
   }
 
   const filteredRoomTypes = filterCategory
@@ -279,14 +317,53 @@ export function RoomTypesList({ onAddRoomType }: RoomTypesListProps) {
                 </button>
               </div>
 
-              <button
-                onClick={(e) => {
-                  e.stopPropagation()
-                }}
-                className="p-2 hover:bg-gray-100 rounded ml-4"
-              >
-                <MoreVertical className="w-5 h-5 text-gray-400" />
-              </button>
+              <div className="relative ml-4" ref={openDropdownId === roomType.roomTypeId ? dropdownRef : null}>
+                <button
+                  onClick={(e) => toggleDropdown(roomType.roomTypeId, e)}
+                  className="p-2 hover:bg-gray-100 rounded"
+                >
+                  <MoreVertical className="w-5 h-5 text-gray-400" />
+                </button>
+
+                {/* Actions dropdown */}
+                {openDropdownId === roomType.roomTypeId && (
+                  <div className="absolute right-0 mt-1 w-56 bg-white rounded-md shadow-lg border border-gray-200 z-50">
+                    <div className="py-1">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleEditRoomType(roomType)
+                        }}
+                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2"
+                      >
+                        <Edit className="w-4 h-4" />
+                        Edit room type
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleEditRooms(roomType)
+                        }}
+                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2"
+                      >
+                        <Home className="w-4 h-4" />
+                        Edit rooms
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleDelete(roomType.roomTypeId)
+                          setOpenDropdownId(null)
+                        }}
+                        className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        Delete room type
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Expanded content */}
@@ -331,6 +408,32 @@ export function RoomTypesList({ onAddRoomType }: RoomTypesListProps) {
           roomTypeId={selectedRoomTypeId}
         />
       )}
+
+      {/* Edit Rooms Modal */}
+      <EditRoomsModal
+        isOpen={editRoomsModalOpen}
+        onClose={() => {
+          setEditRoomsModalOpen(false)
+          setSelectedRoomTypeForEdit(null)
+        }}
+        roomType={selectedRoomTypeForEdit}
+        onSuccess={() => {
+          fetchRoomTypes()
+        }}
+      />
+
+      {/* Edit Room Type Modal */}
+      <EditRoomTypeModal
+        isOpen={editRoomTypeModalOpen}
+        onClose={() => {
+          setEditRoomTypeModalOpen(false)
+          setSelectedRoomTypeForEdit(null)
+        }}
+        roomType={selectedRoomTypeForEdit}
+        onSuccess={() => {
+          fetchRoomTypes()
+        }}
+      />
     </div>
   )
 }

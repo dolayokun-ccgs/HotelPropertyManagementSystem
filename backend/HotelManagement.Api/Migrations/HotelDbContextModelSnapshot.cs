@@ -30,10 +30,16 @@ namespace HotelManagement.Api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GuestId"));
 
-                    b.Property<string>("Address")
+                    b.Property<string>("AddressLine1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AddressLine2")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Comments")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Country")
@@ -61,18 +67,30 @@ namespace HotelManagement.Api.Migrations
                     b.Property<string>("IdType")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Nationality")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Organisation")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PostalCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("State")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("GuestId");
@@ -152,6 +170,69 @@ namespace HotelManagement.Api.Migrations
                     b.HasIndex("UploadedBy");
 
                     b.ToTable("Media");
+                });
+
+            modelBuilder.Entity("HotelManagement.Api.Models.Payment", b =>
+                {
+                    b.Property<int>("PaymentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentId"));
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("CardName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CardNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("PaymentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int?>("ProcessedBy")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReservationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Surcharge")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("TransactionReference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PaymentId");
+
+                    b.HasIndex("PaymentDate");
+
+                    b.HasIndex("ProcessedBy");
+
+                    b.HasIndex("ReservationId");
+
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("HotelManagement.Api.Models.Promotion", b =>
@@ -370,7 +451,7 @@ namespace HotelManagement.Api.Migrations
                             Address = "123 Beach Road, Lagos",
                             AutoReplenishment = false,
                             BaseLanguage = "English",
-                            CreatedDate = new DateTime(2025, 11, 2, 20, 30, 30, 42, DateTimeKind.Utc).AddTicks(1843),
+                            CreatedDate = new DateTime(2025, 11, 8, 10, 55, 18, 347, DateTimeKind.Utc).AddTicks(9504),
                             Currency = "NGN",
                             CurrencyConversion = false,
                             Email = "info@luwaresort.com",
@@ -463,15 +544,33 @@ namespace HotelManagement.Api.Migrations
                     b.Property<int>("Adults")
                         .HasColumnType("int");
 
+                    b.Property<string>("ArrivalTime")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("BookingReference")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("CardExpiry")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CardName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CardNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CheckInDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("CheckInTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("CheckOutDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("CheckOutTime")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Children")
@@ -480,11 +579,37 @@ namespace HotelManagement.Api.Migrations
                     b.Property<DateTime?>("ConfirmedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("CreatedBy")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<decimal>("CreditCardSurcharges")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("Currency")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("DepositAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("DiscountTotal")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ExtraPersonTotal")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ExtrasTotal")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("GuestComments")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("GuestId")
@@ -493,17 +618,35 @@ namespace HotelManagement.Api.Migrations
                     b.Property<int>("Infants")
                         .HasColumnType("int");
 
+                    b.Property<string>("InternalNotes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ModifiedBy")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("PaidAmount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<string>("PaymentMethod")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PropertyId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("RatePlanId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Referral")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("RoomId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("RoomTotal")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("RoomTypeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Source")
@@ -515,9 +658,13 @@ namespace HotelManagement.Api.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("TotalAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalReceived")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
@@ -526,13 +673,55 @@ namespace HotelManagement.Api.Migrations
                     b.HasIndex("BookingReference")
                         .IsUnique();
 
+                    b.HasIndex("CreatedBy");
+
                     b.HasIndex("GuestId");
+
+                    b.HasIndex("ModifiedBy");
 
                     b.HasIndex("PropertyId");
 
+                    b.HasIndex("RatePlanId");
+
                     b.HasIndex("RoomId");
 
+                    b.HasIndex("RoomTypeId");
+
+                    b.HasIndex("Status");
+
+                    b.HasIndex("CheckInDate", "CheckOutDate");
+
                     b.ToTable("Reservations");
+                });
+
+            modelBuilder.Entity("HotelManagement.Api.Models.ReservationGuest", b =>
+                {
+                    b.Property<int>("ReservationGuestId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReservationGuestId"));
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("GuestId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsPrimaryGuest")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ReservationId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ReservationGuestId");
+
+                    b.HasIndex("GuestId");
+
+                    b.HasIndex("ReservationId", "GuestId")
+                        .IsUnique();
+
+                    b.ToTable("ReservationGuests");
                 });
 
             modelBuilder.Entity("HotelManagement.Api.Models.Room", b =>
@@ -816,6 +1005,24 @@ namespace HotelManagement.Api.Migrations
                     b.Navigation("UploadedByUser");
                 });
 
+            modelBuilder.Entity("HotelManagement.Api.Models.Payment", b =>
+                {
+                    b.HasOne("HotelManagement.Api.Models.User", "ProcessedByUser")
+                        .WithMany()
+                        .HasForeignKey("ProcessedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("HotelManagement.Api.Models.Reservation", "Reservation")
+                        .WithMany("Payments")
+                        .HasForeignKey("ReservationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProcessedByUser");
+
+                    b.Navigation("Reservation");
+                });
+
             modelBuilder.Entity("HotelManagement.Api.Models.Promotion", b =>
                 {
                     b.HasOne("HotelManagement.Api.Models.Property", "Property")
@@ -840,11 +1047,21 @@ namespace HotelManagement.Api.Migrations
 
             modelBuilder.Entity("HotelManagement.Api.Models.Reservation", b =>
                 {
+                    b.HasOne("HotelManagement.Api.Models.User", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("HotelManagement.Api.Models.Guest", "Guest")
                         .WithMany("Reservations")
                         .HasForeignKey("GuestId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("HotelManagement.Api.Models.User", "ModifiedByUser")
+                        .WithMany()
+                        .HasForeignKey("ModifiedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("HotelManagement.Api.Models.Property", "Property")
                         .WithMany("Reservations")
@@ -852,16 +1069,53 @@ namespace HotelManagement.Api.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("HotelManagement.Api.Models.RatePlan", "RatePlan")
+                        .WithMany()
+                        .HasForeignKey("RatePlanId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("HotelManagement.Api.Models.Room", "Room")
                         .WithMany("Reservations")
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("HotelManagement.Api.Models.RoomType", "RoomType")
+                        .WithMany()
+                        .HasForeignKey("RoomTypeId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("CreatedByUser");
+
                     b.Navigation("Guest");
+
+                    b.Navigation("ModifiedByUser");
 
                     b.Navigation("Property");
 
+                    b.Navigation("RatePlan");
+
                     b.Navigation("Room");
+
+                    b.Navigation("RoomType");
+                });
+
+            modelBuilder.Entity("HotelManagement.Api.Models.ReservationGuest", b =>
+                {
+                    b.HasOne("HotelManagement.Api.Models.Guest", "Guest")
+                        .WithMany("ReservationGuests")
+                        .HasForeignKey("GuestId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HotelManagement.Api.Models.Reservation", "Reservation")
+                        .WithMany("ReservationGuests")
+                        .HasForeignKey("ReservationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Guest");
+
+                    b.Navigation("Reservation");
                 });
 
             modelBuilder.Entity("HotelManagement.Api.Models.Room", b =>
@@ -925,6 +1179,8 @@ namespace HotelManagement.Api.Migrations
 
             modelBuilder.Entity("HotelManagement.Api.Models.Guest", b =>
                 {
+                    b.Navigation("ReservationGuests");
+
                     b.Navigation("Reservations");
                 });
 
@@ -940,6 +1196,13 @@ namespace HotelManagement.Api.Migrations
                     b.Navigation("RoomTypes");
 
                     b.Navigation("Rooms");
+                });
+
+            modelBuilder.Entity("HotelManagement.Api.Models.Reservation", b =>
+                {
+                    b.Navigation("Payments");
+
+                    b.Navigation("ReservationGuests");
                 });
 
             modelBuilder.Entity("HotelManagement.Api.Models.Room", b =>

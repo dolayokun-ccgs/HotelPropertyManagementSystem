@@ -5,7 +5,7 @@ import { MainLayout } from '@/components/layout/MainLayout'
 import { ReservationsSidebar } from '@/components/reservations/ReservationsSidebar'
 import { ReservationsFilter } from '@/components/reservations/ReservationsFilter'
 import { ReservationsTable } from '@/components/reservations/ReservationsTable'
-import { CreateReservationModal } from '@/components/reservations/CreateReservationModal'
+import { ReservationModal } from '@/components/reservations/ReservationModal'
 import { reservationsApi } from '@/lib/api'
 import type { Reservation } from '@/lib/types'
 
@@ -88,7 +88,7 @@ export default function ReservationsPage() {
         <div className="flex-1 overflow-auto">
           <div className="p-8">
             {/* Page Title */}
-            <h1 className="text-3xl font-normal text-gray-900 mb-6">Reservations</h1>
+            <h1 className="text-2xl font-normal text-gray-900 mb-6">Reservations</h1>
 
             {/* Filter Panel */}
             <ReservationsFilter
@@ -127,10 +127,12 @@ export default function ReservationsPage() {
       </div>
 
       {/* Create Reservation Modal */}
-      <CreateReservationModal
+      <ReservationModal
         isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
-        onSubmit={handleCreateReservation}
+        onClose={() => {
+          setIsCreateModalOpen(false)
+          fetchReservations() // Refresh after closing
+        }}
       />
     </MainLayout>
   )

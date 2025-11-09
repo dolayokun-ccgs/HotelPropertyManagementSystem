@@ -1,43 +1,17 @@
 "use client"
 
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { useRouter } from 'next/navigation'
+import { useAuth } from '@/hooks/useAuth'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import { ChevronDown, User, FileText, HelpCircle, LogOut, Users, CreditCard } from 'lucide-react'
 
-interface UserData {
-  userId: number
-  firstName: string
-  lastName: string
-  email: string
-  role?: string
-  propertyId?: number
-  isActive: boolean
-}
-
 export function UserProfile() {
   const router = useRouter()
-  const [user, setUser] = useState<UserData | null>(null)
-
-  useEffect(() => {
-    // Load user data from localStorage
-    const userData = localStorage.getItem('user')
-    if (userData) {
-      try {
-        setUser(JSON.parse(userData))
-      } catch (error) {
-        console.error('Error parsing user data:', error)
-      }
-    }
-  }, [])
+  const { user, logout } = useAuth()
 
   const handleLogout = () => {
-    // Clear authentication data
-    localStorage.removeItem('authToken')
-    localStorage.removeItem('user')
-
-    // Redirect to login page
-    router.push('/login')
+    logout()
   }
 
   const displayName = user ? `${user.firstName} ${user.lastName}`.toUpperCase() : 'USER'

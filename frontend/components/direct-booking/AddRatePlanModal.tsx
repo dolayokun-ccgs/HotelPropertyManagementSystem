@@ -279,7 +279,7 @@ export function AddRatePlanModal({ isOpen, onClose, onSuccess }: AddRatePlanModa
                         <div>
                           <label className="block text-sm text-gray-700 mb-2">Minimum rate</label>
                           <div className="flex items-center gap-2">
-                            <span className="text-sm text-gray-600">GBP</span>
+                            <span className="text-sm text-gray-600">NGN</span>
                             <input
                               type="number"
                               name="minimumRate"
@@ -290,7 +290,7 @@ export function AddRatePlanModal({ isOpen, onClose, onSuccess }: AddRatePlanModa
                               step="0.01"
                             />
                           </div>
-                          <p className="text-xs text-gray-500 mt-1">Derived from property minimum rate of the selected currency (GBP)</p>
+                          <p className="text-xs text-gray-500 mt-1">Derived from property minimum rate of the selected currency (NGN)</p>
                         </div>
                       </div>
                     </div>
@@ -398,11 +398,11 @@ export function AddRatePlanModal({ isOpen, onClose, onSuccess }: AddRatePlanModa
                       <div className="space-y-2 text-sm">
                         <div className="grid grid-cols-2">
                           <span className="text-gray-600">Currency</span>
-                          <span className="font-medium">British Pound Sterling</span>
+                          <span className="font-medium">Nigerian Naira</span>
                         </div>
                         <div className="grid grid-cols-2">
                           <span className="text-gray-600">Minimum rate</span>
-                          <span className="font-medium">{formData.minimumRate ? `GBP ${formData.minimumRate}` : '-'}</span>
+                          <span className="font-medium">{formData.minimumRate ? `NGN ${formData.minimumRate}` : '-'}</span>
                         </div>
                       </div>
                     </div>

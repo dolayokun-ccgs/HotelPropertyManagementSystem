@@ -1,0 +1,179 @@
+{
+  "page": {
+    "title": "New Reservation",
+    "theme": {
+      "colors": {
+        "primary": "#F36C21",
+        "secondary": "#F5F5F5",
+        "accent": "#4CAF50",
+        "danger": "#E53935",
+        "text": "#333333"
+      },
+      "font": {
+        "family": "Open Sans, sans-serif",
+        "size": "14px"
+      },
+      "spacing": {
+        "padding": "16px",
+        "gap": "12px"
+      },
+      "borderRadius": "6px"
+    },
+    "sections": [
+      {
+        "name": "Header",
+        "type": "tab",
+        "style": {
+          "background": "#F36C21",
+          "color": "#FFFFFF",
+          "padding": "12px 20px"
+        },
+        "tabs": [
+          {
+            "label": "DETAILS",
+            "active": true,
+            "fontWeight": "600"
+          }
+        ]
+      },
+      {
+        "name": "Booking Details",
+        "layout": {
+          "type": "grid",
+          "columns": "repeat(4, 1fr)",
+          "gap": "16px",
+          "padding": "16px"
+        },
+        "fields": [
+          { "label": "Check in", "type": "date", "id": "check_in", "width": "180px" },
+          { "label": "Check out", "type": "date", "id": "check_out", "width": "180px" },
+          { "label": "Length of stay", "type": "text", "value": "1 Night", "readonly": true, "width": "150px" },
+          { "label": "Booking status", "type": "status", "value": "New booking", "color": "green", "width": "150px" }
+        ]
+      },
+      {
+        "name": "Room Details",
+        "type": "table",
+        "style": {
+          "marginTop": "12px",
+          "padding": "16px",
+          "border": "1px solid #ddd",
+          "borderRadius": "6px"
+        },
+        "columns": [
+          { "label": "Room type", "type": "select", "width": "140px" },
+          { "label": "Room rate", "type": "number", "width": "100px" },
+          { "label": "Room #", "type": "select", "width": "100px" },
+          { "label": "Adults", "type": "number", "width": "60px", "default": 0 },
+          { "label": "Children", "type": "number", "width": "60px", "default": 0 },
+          { "label": "Infants", "type": "number", "width": "60px", "default": 0 },
+          { "label": "Room (£)", "type": "currency", "width": "100px", "default": 0 },
+          { "label": "Extra Person (£)", "type": "currency", "width": "120px", "default": 0 },
+          { "label": "Discount (£)", "type": "currency", "width": "100px", "default": 0 }
+        ],
+        "buttons": [
+          {
+            "label": "Add another room",
+            "icon": "plus",
+            "action": "add_room",
+            "style": { "marginTop": "10px", "alignSelf": "flex-end" }
+          }
+        ]
+      },
+      {
+        "name": "Primary Contact",
+        "layout": {
+          "type": "grid",
+          "columns": "repeat(3, 1fr)",
+          "gap": "16px",
+          "padding": "20px"
+        },
+        "sectionTitle": {
+          "text": "PRIMARY CONTACT",
+          "color": "#F36C21",
+          "fontWeight": "600",
+          "marginBottom": "8px"
+        },
+        "fields": [
+          { "label": "First name", "type": "text", "width": "100%" },
+          { "label": "Last name", "type": "text", "width": "100%" },
+          { "label": "Email", "type": "email", "width": "100%" },
+          { "label": "Phone number", "type": "tel", "width": "100%" },
+          { "label": "Organisation", "type": "text", "width": "100%" },
+          { "label": "Address line 1", "type": "text", "width": "100%" },
+          { "label": "Address line 2", "type": "text", "width": "100%" },
+          { "label": "City", "type": "text", "width": "100%" },
+          { "label": "State", "type": "text", "width": "100%" },
+          { "label": "Post code", "type": "text", "width": "100%" },
+          { "label": "ID document type", "type": "select", "width": "100%" },
+          { "label": "ID document number", "type": "text", "width": "100%" },
+          {
+            "group": "Payment",
+            "fields": [
+              { "label": "Card number", "type": "text", "width": "100%" },
+              { "label": "Expiry month", "type": "select", "width": "48%" },
+              { "label": "Expiry year", "type": "select", "width": "48%" },
+              { "label": "Card name", "type": "text", "width": "100%" }
+            ]
+          },
+          {
+            "group": "Other Details",
+            "fields": [
+              { "label": "Select arrival time", "type": "select", "width": "100%" },
+              { "label": "Referral", "type": "text", "width": "100%" },
+              { "label": "Source of reservation", "type": "text", "width": "100%" }
+            ]
+          },
+          {
+            "label": "Guest comments",
+            "type": "textarea",
+            "width": "100%",
+            "rows": 3
+          }
+        ]
+      },
+      {
+        "name": "Booking Summary",
+        "layout": {
+          "type": "vertical",
+          "alignment": "right",
+          "width": "280px",
+          "padding": "20px",
+          "borderLeft": "1px solid #ddd",
+          "background": "#FAFAFA"
+        },
+        "fields": [
+          { "label": "Room Total", "type": "currency", "value": 0 },
+          { "label": "Extra Person Total", "type": "currency", "value": 0 },
+          { "label": "Extras Total", "type": "currency", "value": 0 },
+          { "label": "Discount Total", "type": "currency", "value": 0 },
+          { "label": "Credit Card Surcharges", "type": "currency", "value": 0 },
+          { "label": "Total", "type": "currency", "value": 0, "bold": true },
+          { "label": "Total Received", "type": "currency", "value": 0 },
+          { "label": "Total Outstanding", "type": "currency", "value": 0, "color": "red", "bold": true }
+        ]
+      },
+      {
+        "name": "Actions",
+        "layout": {
+          "type": "horizontal",
+          "justifyContent": "flex-end",
+          "padding": "16px"
+        },
+        "buttons": [
+          {
+            "label": "Save",
+            "style": {
+              "background": "#4CAF50",
+              "color": "#FFFFFF",
+              "padding": "10px 24px",
+              "borderRadius": "6px",
+              "fontWeight": "600"
+            },
+            "action": "save_booking"
+          }
+        ]
+      }
+    ]
+  }
+}

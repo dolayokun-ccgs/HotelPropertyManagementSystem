@@ -77,8 +77,8 @@ public class ReservationsController : ControllerBase
                 Children = r.Children,
                 Status = r.Status,
                 TotalAmount = r.TotalAmount,
-                PaidAmount = r.PaidAmount,
-                Outstanding = r.TotalAmount - r.PaidAmount,
+                PaidAmount = r.TotalReceived,
+                Outstanding = r.TotalAmount - r.TotalReceived,
                 Source = r.Source,
                 SpecialRequests = r.SpecialRequests,
                 CreatedDate = r.CreatedDate
@@ -111,8 +111,8 @@ public class ReservationsController : ControllerBase
                 Children = r.Children,
                 Status = r.Status,
                 TotalAmount = r.TotalAmount,
-                PaidAmount = r.PaidAmount,
-                Outstanding = r.TotalAmount - r.PaidAmount,
+                PaidAmount = r.TotalReceived,
+                Outstanding = r.TotalAmount - r.TotalReceived,
                 Source = r.Source,
                 SpecialRequests = r.SpecialRequests,
                 CreatedDate = r.CreatedDate
@@ -179,7 +179,8 @@ public class ReservationsController : ControllerBase
             Children = dto.Children,
             Status = "Confirmed",
             TotalAmount = dto.TotalAmount,
-            PaidAmount = dto.DepositAmount,
+            TotalReceived = dto.DepositAmount,
+            DepositAmount = dto.DepositAmount,
             Source = dto.Source,
             SpecialRequests = dto.SpecialRequests,
             ConfirmedDate = DateTime.UtcNow
@@ -208,8 +209,8 @@ public class ReservationsController : ControllerBase
                 Children = r.Children,
                 Status = r.Status,
                 TotalAmount = r.TotalAmount,
-                PaidAmount = r.PaidAmount,
-                Outstanding = r.TotalAmount - r.PaidAmount,
+                PaidAmount = r.TotalReceived,
+                Outstanding = r.TotalAmount - r.TotalReceived,
                 Source = r.Source,
                 SpecialRequests = r.SpecialRequests,
                 CreatedDate = r.CreatedDate
@@ -252,7 +253,7 @@ public class ReservationsController : ControllerBase
             reservation.TotalAmount = dto.TotalAmount.Value;
 
         if (dto.PaidAmount.HasValue)
-            reservation.PaidAmount = dto.PaidAmount.Value;
+            reservation.TotalReceived = dto.PaidAmount.Value;
 
         if (dto.SpecialRequests != null)
             reservation.SpecialRequests = dto.SpecialRequests;

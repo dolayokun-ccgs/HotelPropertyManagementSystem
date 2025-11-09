@@ -15,7 +15,7 @@ export function AddPromotionModal({ isOpen, onClose, onSuccess }: AddPromotionMo
     code: '',
     description: '',
     defaultDiscount: 0,
-    currency: 'GBP',
+    currency: 'NGN',
     showDiscountToGuests: false,
     stayAnyDate: false,
     stayStartDate: '',
@@ -173,10 +173,10 @@ export function AddPromotionModal({ isOpen, onClose, onSuccess }: AddPromotionMo
                           onChange={handleInputChange}
                           className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                         >
-                          <option value="GBP">GBP</option>
+                          <option value="NGN">NGN</option>
                           <option value="USD">USD</option>
                           <option value="EUR">EUR</option>
-                          <option value="NGN">NGN</option>
+                          <option value="GBP">GBP</option>
                         </select>
                         <input
                           type="number"

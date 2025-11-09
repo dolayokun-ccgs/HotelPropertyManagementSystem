@@ -19,6 +19,8 @@ public class HotelDbContext : DbContext
     public DbSet<Promotion> Promotions { get; set; }
     public DbSet<Media> Media { get; set; }
     public DbSet<RoomTypeMedia> RoomTypeMedia { get; set; }
+    public DbSet<Payment> Payments { get; set; }
+    public DbSet<ReservationGuest> ReservationGuests { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -73,8 +75,18 @@ public class HotelDbContext : DbContext
         {
             entity.HasKey(e => e.ReservationId);
             entity.Property(e => e.BookingReference).IsRequired().HasMaxLength(50);
+
+            // Pricing precision
+            entity.Property(e => e.RoomTotal).HasPrecision(18, 2);
+            entity.Property(e => e.ExtraPersonTotal).HasPrecision(18, 2);
+            entity.Property(e => e.ExtrasTotal).HasPrecision(18, 2);
+            entity.Property(e => e.DiscountTotal).HasPrecision(18, 2);
+            entity.Property(e => e.CreditCardSurcharges).HasPrecision(18, 2);
             entity.Property(e => e.TotalAmount).HasPrecision(18, 2);
-            entity.Property(e => e.PaidAmount).HasPrecision(18, 2);
+            entity.Property(e => e.TotalReceived).HasPrecision(18, 2);
+            entity.Property(e => e.DepositAmount).HasPrecision(18, 2);
+
+            // Relationships
             entity.HasOne(e => e.Property)
                   .WithMany(p => p.Reservations)
                   .HasForeignKey(e => e.PropertyId)
@@ -83,11 +95,30 @@ public class HotelDbContext : DbContext
                   .WithMany(r => r.Reservations)
                   .HasForeignKey(e => e.RoomId)
                   .OnDelete(DeleteBehavior.Restrict);
+            entity.HasOne(e => e.RoomType)
+                  .WithMany()
+                  .HasForeignKey(e => e.RoomTypeId)
+                  .OnDelete(DeleteBehavior.Restrict);
+            entity.HasOne(e => e.RatePlan)
+                  .WithMany()
+                  .HasForeignKey(e => e.RatePlanId)
+                  .OnDelete(DeleteBehavior.Restrict);
             entity.HasOne(e => e.Guest)
                   .WithMany(g => g.Reservations)
                   .HasForeignKey(e => e.GuestId)
                   .OnDelete(DeleteBehavior.Restrict);
+            entity.HasOne(e => e.CreatedByUser)
+                  .WithMany()
+                  .HasForeignKey(e => e.CreatedBy)
+                  .OnDelete(DeleteBehavior.Restrict);
+            entity.HasOne(e => e.ModifiedByUser)
+                  .WithMany()
+                  .HasForeignKey(e => e.ModifiedBy)
+                  .OnDelete(DeleteBehavior.Restrict);
+
             entity.HasIndex(e => e.BookingReference).IsUnique();
+            entity.HasIndex(e => e.Status);
+            entity.HasIndex(e => new { e.CheckInDate, e.CheckOutDate });
         });
 
         // RatePlan configuration
@@ -165,6 +196,40 @@ public class HotelDbContext : DbContext
                   .HasForeignKey(e => e.MediaId)
                   .OnDelete(DeleteBehavior.Restrict);
             entity.HasIndex(e => new { e.RoomTypeId, e.MediaId }).IsUnique();
+        });
+
+        // Payment configuration
+        modelBuilder.Entity<Payment>(entity =>
+        {
+            entity.HasKey(e => e.PaymentId);
+            entity.Property(e => e.Amount).HasPrecision(18, 2);
+            entity.Property(e => e.Surcharge).HasPrecision(18, 2);
+            entity.Property(e => e.PaymentMethod).IsRequired().HasMaxLength(50);
+            entity.HasOne(e => e.Reservation)
+                  .WithMany(r => r.Payments)
+                  .HasForeignKey(e => e.ReservationId)
+                  .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(e => e.ProcessedByUser)
+                  .WithMany()
+                  .HasForeignKey(e => e.ProcessedBy)
+                  .OnDelete(DeleteBehavior.Restrict);
+            entity.HasIndex(e => e.ReservationId);
+            entity.HasIndex(e => e.PaymentDate);
+        });
+
+        // ReservationGuest configuration
+        modelBuilder.Entity<ReservationGuest>(entity =>
+        {
+            entity.HasKey(e => e.ReservationGuestId);
+            entity.HasOne(e => e.Reservation)
+                  .WithMany(r => r.ReservationGuests)
+                  .HasForeignKey(e => e.ReservationId)
+                  .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(e => e.Guest)
+                  .WithMany(g => g.ReservationGuests)
+                  .HasForeignKey(e => e.GuestId)
+                  .OnDelete(DeleteBehavior.Restrict);
+            entity.HasIndex(e => new { e.ReservationId, e.GuestId }).IsUnique();
         });
 
         // Seed initial data

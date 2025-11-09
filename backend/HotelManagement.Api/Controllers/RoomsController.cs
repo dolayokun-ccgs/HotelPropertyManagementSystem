@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HotelManagement.Api.Data;
@@ -5,6 +6,7 @@ using HotelManagement.Api.DTOs;
 
 namespace HotelManagement.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class RoomsController : ControllerBase

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { ratePlansApi } from '@/lib/api'
 import type { RatePlan } from '@/lib/types'
+import { AssignRoomTypesModal } from '../rate-plans/AssignRoomTypesModal'
 
 interface RatePlansListProps {
   onAddRatePlan: () => void
@@ -11,6 +12,8 @@ interface RatePlansListProps {
 export function RatePlansList({ onAddRatePlan }: RatePlansListProps) {
   const [ratePlans, setRatePlans] = useState<RatePlan[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [assignModalOpen, setAssignModalOpen] = useState(false)
+  const [selectedRatePlan, setSelectedRatePlan] = useState<{ id: number; name: string } | null>(null)
 
   useEffect(() => {
     fetchRatePlans()
@@ -48,6 +51,11 @@ export function RatePlansList({ onAddRatePlan }: RatePlansListProps) {
       console.error('Failed to set default rate plan:', error)
       alert('Failed to set as default')
     }
+  }
+
+  const handleAssignRoomTypes = (ratePlanId: number, name: string) => {
+    setSelectedRatePlan({ id: ratePlanId, name })
+    setAssignModalOpen(true)
   }
 
   if (isLoading) {
@@ -99,99 +107,117 @@ export function RatePlansList({ onAddRatePlan }: RatePlansListProps) {
 
   // List view with rate plans
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">
-          Rate plans ({ratePlans.length})
-        </h2>
-        <button
-          onClick={onAddRatePlan}
-          className="px-6 py-2 bg-primary text-white rounded-md hover:bg-blue-700 font-medium"
-        >
-          Add a rate plan
-        </button>
-      </div>
-
-      <div className="space-y-4">
-        {ratePlans.map((plan) => (
-          <div
-            key={plan.ratePlanId}
-            className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow"
+    <>
+      <div className="p-6">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold text-gray-900">
+            Rate plans ({ratePlans.length})
+          </h2>
+          <button
+            onClick={onAddRatePlan}
+            className="px-6 py-2 bg-primary text-white rounded-md hover:bg-blue-700 font-medium"
           >
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <div className="flex items-center gap-3 mb-2">
-                  <h3 className="text-lg font-semibold text-gray-900">{plan.name}</h3>
-                  {plan.isDefault && (
-                    <span className="px-2 py-1 text-xs font-semibold rounded bg-blue-100 text-blue-800">
-                      Default
-                    </span>
+            Add a rate plan
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          {ratePlans.map((plan) => (
+            <div
+              key={plan.ratePlanId}
+              className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow"
+            >
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-2">
+                    <h3 className="text-lg font-semibold text-gray-900">{plan.name}</h3>
+                    {plan.isDefault && (
+                      <span className="px-2 py-1 text-xs font-semibold rounded bg-blue-100 text-blue-800">
+                        Default
+                      </span>
+                    )}
+                    {!plan.isActive && (
+                      <span className="px-2 py-1 text-xs font-semibold rounded bg-gray-100 text-gray-800">
+                        Inactive
+                      </span>
+                    )}
+                  </div>
+
+                  {plan.description && (
+                    <p className="text-gray-600 mb-4">{plan.description}</p>
                   )}
-                  {!plan.isActive && (
-                    <span className="px-2 py-1 text-xs font-semibold rounded bg-gray-100 text-gray-800">
-                      Inactive
-                    </span>
-                  )}
+
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    {plan.minimumLengthOfStay && (
+                      <div>
+                        <span className="text-gray-500">Min stay:</span>{' '}
+                        <span className="font-medium">{plan.minimumLengthOfStay} nights</span>
+                      </div>
+                    )}
+                    {plan.maximumLengthOfStay && (
+                      <div>
+                        <span className="text-gray-500">Max stay:</span>{' '}
+                        <span className="font-medium">{plan.maximumLengthOfStay} nights</span>
+                      </div>
+                    )}
+                    {plan.releasePeriod && (
+                      <div>
+                        <span className="text-gray-500">Release period:</span>{' '}
+                        <span className="font-medium">{plan.releasePeriod} days</span>
+                      </div>
+                    )}
+                    {plan.minimumRate && (
+                      <div>
+                        <span className="text-gray-500">Min rate:</span>{' '}
+                        <span className="font-medium">NGN {plan.minimumRate.toFixed(2)}</span>
+                      </div>
+                    )}
+                    {plan.inclusions && (
+                      <div className="col-span-2">
+                        <span className="text-gray-500">Inclusions:</span>{' '}
+                        <span className="font-medium">{plan.inclusions}</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
-                {plan.description && (
-                  <p className="text-gray-600 mb-4">{plan.description}</p>
-                )}
-
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  {plan.minimumLengthOfStay && (
-                    <div>
-                      <span className="text-gray-500">Min stay:</span>{' '}
-                      <span className="font-medium">{plan.minimumLengthOfStay} nights</span>
-                    </div>
-                  )}
-                  {plan.maximumLengthOfStay && (
-                    <div>
-                      <span className="text-gray-500">Max stay:</span>{' '}
-                      <span className="font-medium">{plan.maximumLengthOfStay} nights</span>
-                    </div>
-                  )}
-                  {plan.releasePeriod && (
-                    <div>
-                      <span className="text-gray-500">Release period:</span>{' '}
-                      <span className="font-medium">{plan.releasePeriod} days</span>
-                    </div>
-                  )}
-                  {plan.minimumRate && (
-                    <div>
-                      <span className="text-gray-500">Min rate:</span>{' '}
-                      <span className="font-medium">NGN {plan.minimumRate.toFixed(2)}</span>
-                    </div>
-                  )}
-                  {plan.inclusions && (
-                    <div className="col-span-2">
-                      <span className="text-gray-500">Inclusions:</span>{' '}
-                      <span className="font-medium">{plan.inclusions}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2 ml-4">
-                {!plan.isDefault && plan.isActive && (
+                <div className="flex items-center gap-2 ml-4">
                   <button
-                    onClick={() => handleSetAsDefault(plan.ratePlanId)}
+                    onClick={() => handleAssignRoomTypes(plan.ratePlanId, plan.name)}
                     className="px-3 py-1 text-sm text-primary hover:text-blue-700 font-medium"
                   >
-                    Set as default
+                    Assign room types
                   </button>
-                )}
-                <button
-                  onClick={() => handleDelete(plan.ratePlanId)}
-                  className="px-3 py-1 text-sm text-red-600 hover:text-red-700 font-medium"
-                >
-                  Delete
-                </button>
+                  {!plan.isDefault && plan.isActive && (
+                    <button
+                      onClick={() => handleSetAsDefault(plan.ratePlanId)}
+                      className="px-3 py-1 text-sm text-primary hover:text-blue-700 font-medium"
+                    >
+                      Set as default
+                    </button>
+                  )}
+                  <button
+                    onClick={() => handleDelete(plan.ratePlanId)}
+                    className="px-3 py-1 text-sm text-red-600 hover:text-red-700 font-medium"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+
+      {/* Assign Room Types Modal */}
+      {selectedRatePlan && (
+        <AssignRoomTypesModal
+          isOpen={assignModalOpen}
+          onClose={() => setAssignModalOpen(false)}
+          ratePlanId={selectedRatePlan.id}
+          ratePlanName={selectedRatePlan.name}
+        />
+      )}
+    </>
   )
 }

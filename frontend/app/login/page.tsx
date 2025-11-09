@@ -2,9 +2,11 @@
 
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useAuth } from '@/hooks/useAuth'
 
 export default function LoginPage() {
   const router = useRouter()
+  const { login, isAuthenticated } = useAuth()
   const [step, setStep] = useState<'email' | 'password'>('email')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -12,6 +14,13 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/calendar')
+    }
+  }, [isAuthenticated, router])
 
   // Load remembered email on mount
   useEffect(() => {
@@ -60,34 +69,12 @@ export default function LoginPage() {
     setIsLoading(true)
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          password,
-          rememberMe: rememberEmail
-        }),
-      })
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        setError(data.message || 'Invalid email or password')
-        return
-      }
-
-      // Save token and user data
-      localStorage.setItem('authToken', data.token)
-      localStorage.setItem('user', JSON.stringify(data.user))
-
-      // Redirect to calendar page (or dashboard)
+      await login(email, password, rememberEmail)
+      // Redirect to calendar page after successful login
       router.push('/calendar')
     } catch (error) {
       console.error('Login error:', error)
-      setError('An error occurred. Please try again.')
+      setError('Invalid email or password. Please try again.')
     } finally {
       setIsLoading(false)
     }

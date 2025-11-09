@@ -174,9 +174,10 @@ export default function GeneralInformationPage() {
                     onChange={(e) => setFormData({ ...formData, currency: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                   >
-                    <option value="GBP">British Pound Sterling (GBP)</option>
+                    <option value="NGN">Nigerian Naira (NGN)</option>
                     <option value="USD">US Dollar (USD)</option>
                     <option value="EUR">Euro (EUR)</option>
+                    <option value="GBP">British Pound Sterling (GBP)</option>
                   </select>
                 </div>
 
@@ -213,9 +214,10 @@ export default function GeneralInformationPage() {
                 <div>
                   <div className="text-sm text-gray-600">Base currency</div>
                   <div className="text-base text-gray-900">
-                    {property.currency === 'GBP' ? 'British Pound Sterling (GBP)' :
+                    {property.currency === 'NGN' ? 'Nigerian Naira (NGN)' :
                      property.currency === 'USD' ? 'US Dollar (USD)' :
-                     property.currency === 'EUR' ? 'Euro (EUR)' : property.currency}
+                     property.currency === 'EUR' ? 'Euro (EUR)' :
+                     property.currency === 'GBP' ? 'British Pound Sterling (GBP)' : property.currency}
                   </div>
                 </div>
                 <div>

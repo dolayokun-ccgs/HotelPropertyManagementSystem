@@ -16,7 +16,9 @@
       "Bash(del:*)",
       "Bash(taskkill /F /PID 7460)",
       "Bash(taskkill:*)",
-      "Bash(kill:*)"
+      "Bash(kill:*)",
+      "Bash(timeout /t 5)",
+      "Bash(TOKEN=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIzIiwiZW1haWwiOiJhZG1pbkBob3RlbC5jb20iLCJqdGkiOiJhYzExNmY4Mi0xYWY3LTRmMzEtYTJiYy02N2ZkMzU5OTJhNTIiLCJyb2xlIjoiVXNlciIsIm5iZiI6MTc2MjYwMTYxNSwiZXhwIjoxNzYyNjA1MjE1LCJpYXQiOjE3NjI2MDE2MTUsImlzcyI6IkhvdGVsTWFuYWdlbWVudEFwaSIsImF1ZCI6IkhvdGVsTWFuYWdlbWVudENsaWVudCJ9.dy7r3-wqjWtK2eUfWhSp0AcO3A6k0uqYzvg28vzSoZA\")"
     ],
     "deny": [],
     "ask": []
