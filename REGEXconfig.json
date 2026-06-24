@@ -1,0 +1,179 @@
+// Cascade Job
+[
+  {
+    "Id": "2b6eae2b-8bab-4a5c-ad85-2e0f2477a085",
+    "CreatedOn": "2026-06-03T08:09:53.0835489Z",
+    "LastModifiedOn": "2026-06-24T08:00:47.2703618Z",
+    "EmployeeId": "2ebb3698-c1cf-4048-90a5-44a95ed4a434",
+    "JobTitle": "Technical Manager",
+    "StartDate": "2026-06-01T00:00:00Z",
+    "EndDate": null,
+    "LineManagerId": "d9d18ddd-6593-4143-a388-e7294681ed9c",
+    "HierarchyNodeId": "33b23064-7a60-4c22-819d-5ab8f7489d4e",
+    "Active": true,
+    "Salary": 73544,
+    "PayFrequency": "Monthly",
+    "PayBasis": "Annually",
+    "Position": "JT0482",
+    "ChangeReason": "Change of Department/Location",
+    "NormalHours": 47.5
+  }
+]
+
+// Cascade Hierarchy
+[
+  {
+    "Id": "04dd9004-0e39-412e-8472-91325a1da3d5",
+    "CreatedOn": "2025-12-15T13:28:31.8604153Z",
+    "LastModifiedOn": "2025-12-15T13:28:31.8604154Z",
+    "ParentId": "e6c20d69-aa81-4b1e-8901-5f8b7743c394",
+    "Level": 3,
+    "Title": "Quality Assurance",
+    "Disabled": false
+  }
+]
+
+// Cascade Employee
+[
+  {
+    "Id": "f6e892ba-b4ac-49db-9b98-4b3918a4eb7f",
+    "CreatedOn": "2024-07-12T01:49:16.8174705Z",
+    "CreatedBy": null,
+    "LastModifiedOn": "2026-06-24T00:39:28.6474382Z",
+    "LastModifiedBy": null,
+    "DisplayId": "BU00443",
+    "TitleHonorific": "Mr",
+    "FirstName": "Giovane",
+    "KnownAs": "Gio",
+    "OtherName": null,
+    "LastName": "Ilibio",
+    "CostCentre": null,
+    "WorkingStatus": "Sick",
+    "IsManager": false,
+    "NationalInsuranceNumber": "SR857550C",
+    "PayrollId": "11617",
+    "TaxCode": null,
+    "IncludeInPayroll": false,
+    "EmploymentStartDate": "2021-09-13T00:00:00Z",
+    "EmploymentLeftDate": null,
+    "ContinuousServiceDate": "2021-09-13T00:00:00Z",
+    "DateOfBirth": "1982-11-26T00:00:00Z",
+    "LastWorkingDate": null,
+    "Gender": "Male",
+    "Ethnicity": null,
+    "Nationality": null,
+    "Religion": null,
+    "LeaverReason": null,
+    "MaritalStatus": null,
+    "GenderIdentity": null,
+    "WindowsUsername": null,
+    "PayrollCompanyName": null,
+    "Initials": "GI",
+    "LengthOfServiceYears": 4,
+    "LengthOfServiceMonths": 57,
+    "SourceSystemId": "2655506a-dc7a-4a96-af67-eaeda5991943",
+    "SourceSystemCreatedOn": "2024-02-22T14:11:23.07Z",
+    "SourceSystemLastModifiedOn": "2025-04-10T13:54:11.78Z",
+    "Phones": [
+      {
+        "Ownership": "Personal",
+        "Type": "Mobile",
+        "Value": "07393584791"
+      }
+    ],
+    "Emails": [
+      {
+        "Ownership": "Personal",
+        "Value": "gcanarin@gmail.com"
+      }
+    ],
+    "Addresses": [
+      {
+        "Ownership": "Personal",
+        "Address1": "11 Baffin Road",
+        "Address2": "Gravesend",
+        "Address3": "Gravesham",
+        "Address4": "Kent",
+        "Address5": null,
+        "PostCode": "DA12 5BS"
+      }
+    ],
+    "AssignedPaySchemes": {
+      "SickPay": null,
+      "MaternityPay": null,
+      "PaternityPay": null,
+      "AdoptionPay": null,
+      "SharedParentalPay": null,
+      "AverageHolidayPay": null,
+      "BereavementPay": null,
+      "NeonatalPay": null
+    },
+    "personalEmail": {
+      "Ownership": "Personal",
+      "Value": "gcanarin@gmail.com"
+    },
+    "personalMobile": {
+      "Ownership": "Personal",
+      "Type": "Mobile",
+      "Value": "07393584791"
+    },
+    "personalAddress": {
+      "Ownership": "Personal",
+      "Address1": "11 Baffin Road",
+      "Address2": "Gravesend",
+      "Address3": "Gravesham",
+      "Address4": "Kent",
+      "Address5": null,
+      "PostCode": "DA12 5BS"
+    }
+  }
+]
+
+// RecruiterFlow
+{
+  "event_time": "2026-06-24T11:20:50",
+  "id": 3487,
+  "firstName": "Robert-Florinel",
+  "lastName": "Grabovschi",
+  "email": "florinrobert2001@yahoo.com",
+  "phoneNumber": "07553499136",
+  "locationName": "17 Silkfield Road, London NW9 6QT, UK",
+  "streetAddress1": "17, Silkfield Road",
+  "streetAddress2": "",
+  "city": "London",
+  "country": "United Kingdom",
+  "postCode": "NW9 6QT",
+  "assignToJob": "BE0016.01 - 1 Victoria Street - Strip Out",
+  "source": "Keltbray Ltd - KRS",
+  "trainingJobTitle": "Groundworker",
+  "position": "JT0608",
+  "rateWanted": null,
+  "validMedical": null,
+  "drivingLicense": null,
+  "currentWorkingRate": "GBP 22",
+  "medicalExpiryDate": null,
+  "CITBExpiryDate": null,
+  "rightToWorkEndDate": "2027-04-01",
+  "CISRS": null,
+  "CCDO": null,
+  "CPCS": null,
+  "CSCS": "6571741",
+  "payrollProvider": null,
+  "NINumber": "SY900788A",
+  "dateOfBirth": "2001-03-11",
+  "PPACID": "282187",
+  "KISID": null,
+  "projectNumber": "BE0016",
+  "wbs": "01",
+  "projectName": "1 Victoria Street - Strip Out",
+  "jobId": 3987,
+  "jobTitle": "Striker",
+  "jobCompanyName": "BE0016.01 - 1 Victoria Street - Strip Out",
+  "jobLocationName": "BE0016.01 - 1 Victoria Street - Strip Out",
+  "department": "Built Environment - South East",
+  "salary": 22,
+  "placementJobStartDate": "2026-06-24",
+  "placementSalary": 22,
+  "placementId": 8400,
+  "latestActivityTime": "2026-06-24T11:20:50"
+}
