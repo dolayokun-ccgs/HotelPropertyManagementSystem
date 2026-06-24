@@ -1,68 +1,80 @@
+import json
 import logging
 import re
-from typing import Any, Dict
+from typing import Any
 
 
-# =====================================================
+# ============================================================
 # CLEANING FUNCTIONS
-# =====================================================
+# ============================================================
 
 def clean_name(value: str) -> str:
     """
-    Allows:
-        Letters
-        Spaces
-        Apostrophes
-        Hyphens
+    Allow:
+      - letters
+      - spaces
+      - apostrophes
+      - hyphens
+
     Examples:
-        O'Connor
-        Robert-Florinel
+      O'Connor
+      Robert-Florinel
     """
     value = value.strip()
-    return re.sub(r"[^A-Za-z\s'\-]", "", value)
+
+    return re.sub(
+        r"[^A-Za-z\s'\-]",
+        "",
+        value
+    )
 
 
 def clean_email(value: str) -> str:
-    """
-    Trim and lowercase.
-    """
     return value.strip().lower()
 
 
 def clean_phone(value: str) -> str:
     """
-    Retain digits only.
+    Keep digits only.
 
     Example:
-        (07393) 584-791
-        -> 07393584791
+      (07393) 584-791
+      -> 07393584791
     """
-    return re.sub(r"[^0-9]", "", value)
+    return re.sub(
+        r"[^0-9]",
+        "",
+        value
+    )
 
 
 def clean_ni_number(value: str) -> str:
     """
-    National Insurance Number
-
     Example:
-        SR 857550 C
-        -> SR857550C
+      SR 857550 C
+      -> SR857550C
     """
-    value = re.sub(r"[^A-Za-z0-9]", "", value)
+    value = re.sub(
+        r"[^A-Za-z0-9]",
+        "",
+        value
+    )
+
     return value.upper()
 
 
 def clean_postcode(value: str) -> str:
     """
-    Normalize UK postcode.
-
     Example:
-        da12 5bs
-        DA12-5BS
-
-        -> DA12 5BS
+      da12-5bs
+      -> DA12 5BS
     """
-    value = re.sub(r"[^A-Za-z0-9]", "", value).upper()
+
+    value = re.sub(
+        r"[^A-Za-z0-9]",
+        "",
+        value
+    ).upper()
 
     if len(value) > 3:
         value = f"{value[:-3]} {value[-3:]}"
@@ -72,31 +84,27 @@ def clean_postcode(value: str) -> str:
 
 def clean_address(value: str) -> str:
     """
-    Preserve normal address punctuation.
+    Preserve common address punctuation.
 
-    Example:
-        Flat 2/3 King's Court
-        17, Silkfield Road
+    Examples:
+      Flat 2/3 King's Court
+      17, Silkfield Road
     """
-    value = value.strip()
 
     return re.sub(
         r"[^\w\s,\-'/]",
         "",
-        value
+        value.strip()
     )
 
 
 def clean_position(value: str) -> str:
     """
-    Position / Job Code.
-
     Example:
-        JT0482
-        JT/0482
-
-        -> JT0482
+      JT/0608
+      -> JT0608
     """
+
     return re.sub(
         r"[^A-Za-z0-9]",
         "",
@@ -106,12 +114,12 @@ def clean_position(value: str) -> str:
 
 def clean_job_title(value: str) -> str:
     """
-    Preserve common job title punctuation.
-
-    Example:
-        Senior QA/QC Manager
-        Mechanical & Electrical Lead
+    Preserve:
+      &
+      /
+      -
     """
+
     return re.sub(
         r"[^A-Za-z0-9\s&\-/]",
         "",
@@ -121,11 +129,12 @@ def clean_job_title(value: str) -> str:
 
 def clean_project_reference(value: str) -> str:
     """
-    Preserve dots and dashes.
-
-    Example:
-        BE0016.01
+    Preserve:
+      .
+      -
+      spaces
     """
+
     return re.sub(
         r"[^A-Za-z0-9.\-\s]",
         "",
@@ -133,9 +142,9 @@ def clean_project_reference(value: str) -> str:
     )
 
 
-# =====================================================
+# ============================================================
 # FIELD MAPPINGS
-# =====================================================
+# ============================================================
 
 FIELD_RULES = {
 
@@ -148,16 +157,15 @@ FIELD_RULES = {
 
     # Email
     "email": clean_email,
-    "value_email": clean_email,
 
     # Phone
     "phonenumber": clean_phone,
 
-    # National Insurance
+    # NI Number
     "ninumber": clean_ni_number,
     "nationalinsurancenumber": clean_ni_number,
 
-    # Postcodes
+    # Postcode
     "postcode": clean_postcode,
 
     # Addresses
@@ -170,42 +178,106 @@ FIELD_RULES = {
     "streetaddress2": clean_address,
     "locationname": clean_address,
 
-    # Positions
+    # Position / Codes
     "position": clean_position,
 
-    # Job Titles
+    # Titles
     "jobtitle": clean_job_title,
     "trainingjobtitle": clean_job_title,
 
-    # Project references
+    # Projects
     "projectnumber": clean_project_reference,
     "assigntojob": clean_project_reference
 }
 
 
-# =====================================================
-# FIELD DETECTION
-# =====================================================
+# ============================================================
+# SOURCE DETECTION
+# ============================================================
+
+def detect_source_system(payload: dict) -> str:
+
+    if "DisplayId" in payload:
+        return "Cascade"
+
+    if "PPACID" in payload:
+        return "RecruiterFlow"
+
+    return "Unknown"
+
+
+# ============================================================
+# CORRELATION ID
+# ============================================================
+
+def get_correlation_id(payload: dict) -> str:
+
+    return (
+        payload.get("DisplayId")
+        or payload.get("PPACID")
+        or payload.get("EmployeeId")
+        or payload.get("Id")
+        or str(payload.get("id"))
+        or "UNKNOWN"
+    )
+
+
+# ============================================================
+# STRUCTURED LOGGING
+# ============================================================
+
+def log_field_change(
+    correlation_id: str,
+    source_system: str,
+    field_name: str,
+    original: str,
+    cleaned: str
+) -> None:
+
+    log_event = {
+        "event": "data_cleansed",
+        "sourceSystem": source_system,
+        "correlationId": correlation_id,
+        "field": field_name,
+        "original": original,
+        "cleaned": cleaned
+    }
+
+    logging.info(json.dumps(log_event))
+
+
+# ============================================================
+# RULE LOOKUP
+# ============================================================
 
 def get_rule(field_name: str):
 
-    field_name = field_name.lower()
-
-    return FIELD_RULES.get(field_name)
+    return FIELD_RULES.get(field_name.lower())
 
 
-# =====================================================
+# ============================================================
 # PAYLOAD CLEANSER
-# =====================================================
+# ============================================================
 
-def cleanse_payload(payload: Any) -> Any:
+def cleanse_payload(
+    payload: Any,
+    correlation_id: str,
+    source_system: str,
+    stats: dict
+) -> Any:
 
     if payload is None:
         return None
 
     if isinstance(payload, list):
+
         return [
-            cleanse_payload(item)
+            cleanse_payload(
+                item,
+                correlation_id,
+                source_system,
+                stats
+            )
             for item in payload
         ]
 
@@ -215,46 +287,90 @@ def cleanse_payload(payload: Any) -> Any:
 
         for key, value in payload.items():
 
-            if isinstance(value, (dict, list)):
-                result[key] = cleanse_payload(value)
-                continue
-
             if value is None:
                 result[key] = None
                 continue
 
+            if isinstance(value, (dict, list)):
+
+                result[key] = cleanse_payload(
+                    value,
+                    correlation_id,
+                    source_system,
+                    stats
+                )
+
+                continue
+
             rule = get_rule(key)
 
-            if rule:
+            if not rule:
+                result[key] = value
+                continue
+
+            try:
 
                 original = str(value)
+                cleaned = rule(original)
 
-                try:
-                    cleaned = rule(original)
+                result[key] = cleaned
 
-                    if original != cleaned:
-                        logging.info(
-                            "Field '%s' cleaned: '%s' -> '%s'",
-                            key,
-                            original,
-                            cleaned
-                        )
+                if original != cleaned:
 
-                    result[key] = cleaned
+                    stats["fields_modified"] += 1
 
-                except Exception as ex:
-
-                    logging.exception(
-                        "Cleaning failed for field '%s'",
-                        key
+                    log_field_change(
+                        correlation_id=correlation_id,
+                        source_system=source_system,
+                        field_name=key,
+                        original=original,
+                        cleaned=cleaned
                     )
 
-                    result[key] = value
+            except Exception:
 
-            else:
+                logging.exception(
+                    "Failed cleaning field '%s'",
+                    key
+                )
 
                 result[key] = value
 
         return result
 
     return payload
+
+
+# ============================================================
+# ENTRY POINT
+# ============================================================
+
+def process_payload(payload: dict) -> dict:
+
+    source_system = detect_source_system(payload)
+
+    correlation_id = get_correlation_id(payload)
+
+    stats = {
+        "fields_modified": 0
+    }
+
+    cleaned_payload = cleanse_payload(
+        payload=payload,
+        correlation_id=correlation_id,
+        source_system=source_system,
+        stats=stats
+    )
+
+    logging.info(
+        json.dumps(
+            {
+                "event": "payload_processed",
+                "sourceSystem": source_system,
+                "correlationId": correlation_id,
+                "fieldsModified": stats["fields_modified"]
+            }
+        )
+    )
+
+    return cleaned_payload
